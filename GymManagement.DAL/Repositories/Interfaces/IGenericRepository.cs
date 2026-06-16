@@ -18,18 +18,21 @@ namespace GymManagement.DAL.Repositories.Interfaces
         Task<TEntity?> GetByIdAsync(int id, CancellationToken ct = default);
 
         // add
-        Task<int> AddAsync(TEntity entity);
+        void AddAsync(TEntity entity);
 
         // update
-        Task<int> UpdateAsync(TEntity entity);
+        void UpdateAsync(TEntity entity);
 
         // delete
-        Task<int> DeleteAsync(TEntity entity);
+        void DeleteAsync(TEntity entity);
 
 
 
         // check
         Task<bool> AnyAsync(Expression<Func<TEntity,bool>> predicate,CancellationToken ct = default);
 
+
+        // check if user has active membership
+        Task<TEntity> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate, bool tracking = false, CancellationToken ct = default);
     }
 }

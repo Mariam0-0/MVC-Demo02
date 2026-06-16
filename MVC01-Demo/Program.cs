@@ -20,6 +20,8 @@ namespace MVC01_Demo
             // Register DI
             builder.Services.AddScoped<IMemberService,MemberService>();
             builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
             // ef core will create object from dbcontext automatic when we request it from the container (DI)
 
             builder.Services.AddDbContext<GymDbContext>(options =>

@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("GymManagement.DAL")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b8236267dc40df5a9758816144df2d2d26c4f9a5")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+628eb15cd4bf34a508ac9d1272a447e9ed1ef080")]
 [assembly: System.Reflection.AssemblyProductAttribute("GymManagement.DAL")]
 [assembly: System.Reflection.AssemblyTitleAttribute("GymManagement.DAL")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
