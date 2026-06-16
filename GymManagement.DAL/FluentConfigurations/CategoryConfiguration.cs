@@ -18,7 +18,7 @@ namespace GymManagement.DAL.FluentConfigurations
                 .HasMaxLength(30);
 
             builder.Property(X => X.CreatedAt)
-                .HasDefaultValueSql("GETDATE");
+                .HasDefaultValueSql("GETDATE()");
 
             //seeding
             // cardio, strength, yoga, boxing, crossfit

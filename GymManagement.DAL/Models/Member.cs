@@ -11,5 +11,16 @@ namespace GymManagement.DAL.Models
         public string? Photo {  get; set; }
 
         // join date = createdAt of base entity
+
+        #region Relationships
+
+        public HealthRecord HealthRecord { get; set; } = default;
+
+
+        public ICollection<Membership> Plans { get; set; }
+
+        public ICollection<Booking> MemberSessions { get; set; }
+
+        #endregion
     }
 }
