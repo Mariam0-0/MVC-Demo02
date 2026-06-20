@@ -21,7 +21,7 @@
         }
         else if (TempData["ErrorMessage"] != null)
         {
-            
+
             @* Show Error Message if Member Failed To Create *@
             <div id="Alert" class="alert alert-danger alert-dismissible fade show">
                 <i class="bi bi-exclamation-triangle-fill me-2"></i>
@@ -41,26 +41,36 @@
             @if (Model.Any())
             {
                 <div class="table-responsive " style="overflow: visible;">
-                <table class="table table-borderless">
-                    <thead>
-                        <tr>
-                            <th><span>Photo</span></th>
-                            <th><span>Name</span></th>
-                            <th><span>Email</span></th>
-                            <th><span>Gender</span></th>
-                            <th><span>Phone</span></th>
-                            <th><span>Action</span></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @* loop through members and display their data *@
-                        @foreach(var member in Model){
+                    <table class="table table-borderless">
+                        <thead>
                             <tr>
-                            <td>
-                                <span class="avatar">
-                                    <img src="~/images/User.jpg" alt="Default Avatar" class="rounded-circle"
-                                        style="width: 40px; height: 40px;" />
-                                </span>
+                                <th><span>Photo</span></th>
+                                <th><span>Name</span></th>
+                                <th><span>Email</span></th>
+                                <th><span>Gender</span></th>
+                                <th><span>Phone</span></th>
+                                <th><span>Action</span></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @* loop through members and display their data *@
+                            @foreach(var member in Model){
+                                <tr>
+                                    <td>
+                                        <span class="avatar">
+                                            @if (string.IsNullOrWhiteSpace(member.Photo))
+                                            {
+                                                <img src="~/images/User.jpg" alt="Default Avatar" class="rounded-circle"
+                                                style="width: 40px; height: 40px;" />
+
+                                            }
+                                            else
+                                            {
+                                                <img src="@Url.Action("Picture", "Members", new{id = member.Id})" alt="Default Avatar" class="rounded-circle"
+                                                     style="width: 40px; height: 40px;" />
+
+                                            }
+                                        </span>
                             </td>
                             <td><span>@member.Name</span></td>
                             <td><span>@member.Email</span></td>

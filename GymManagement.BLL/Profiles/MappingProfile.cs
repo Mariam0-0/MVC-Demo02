@@ -3,6 +3,7 @@
 using GymManagement.BLL.ViewModels.MemberViewModels;
 using GymManagement.BLL.ViewModels.SessionViewModel;
 using GymManagement.DAL.Models;
+using GymManagmemnt.BLL.ViewModels.SessionViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -58,6 +59,13 @@ namespace GymManagement.BLL.Profiles
             CreateMap<CreateSessionViewModel, Session>();
             CreateMap<Category, CategorySelectViewModel>();
             CreateMap<Trainer, TrainerSelectViewModel>();
+
+            CreateMap<Session, SessionViewModel>()
+                .ForMember(dest => dest.TrainerName, opt => opt.MapFrom(src => src.Trainer.Name))
+                .ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.Category.CategoryName))
+                ;
+
+            CreateMap<Session, UpdateSessionViewModel>().ReverseMap();
         }
     }
 }

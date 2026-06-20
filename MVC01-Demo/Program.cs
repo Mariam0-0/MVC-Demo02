@@ -1,17 +1,19 @@
 using GymManagement.BLL.Profiles;
 using GymManagement.BLL.Services.Classes;
 using GymManagement.BLL.Services.Interfaces;
+using GymManagement.DAL.Contexts;
 using GymManagement.DAL.Repositories.Classes;
 using GymManagement.DAL.Repositories.Interfaces;
 using Microsoft.Build.Framework;
 using Microsoft.EntityFrameworkCore;
 using MVC01_Demo.Contexts;
+using System.Threading.Tasks;
 
 namespace MVC01_Demo
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -25,6 +27,7 @@ namespace MVC01_Demo
             builder.Services.AddScoped<ISessionRepository, SessionRepository>();
             builder.Services.AddScoped<ISessionService, SessionService>();
             builder.Services.AddAutoMapper(X => X.AddProfile(new MappingProfile()));
+            builder.Services.AddScoped<IAttachmentService, AttachmentService>();
 
             // ef core will create object from dbcontext automatic when we request it from the container (DI)
 
@@ -33,7 +36,17 @@ namespace MVC01_Demo
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
 
+
             var app = builder.Build();
+
+
+            // SEEDING
+            await app.MigrateAndSeedDataAsync();
+
+
+
+
+
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())

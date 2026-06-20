@@ -10,9 +10,11 @@ namespace MVC01_Demo.Controllers
 
         // service
         private readonly IMemberService _memService;
-        public MembersController(IMemberService memService)
+        private readonly IAttachmentService _attachService;
+        public MembersController(IMemberService memService, IAttachmentService attachmentService)
         {
             _memService = memService;
+            _attachService = attachmentService;
         }
         #region Get Members
 
@@ -49,6 +51,20 @@ namespace MVC01_Demo.Controllers
             }
             return View(record);
         }
+
+        // for images
+        // action to get membersPhotos
+        [HttpGet]
+        public async Task<IActionResult> Picture(int id)
+        {
+            var member =  await _memService.GetMemberDetailsByIdAsync(id);
+            if (member is null || String.IsNullOrWhiteSpace(member.Photo)) return NotFound();
+
+            var result = _attachService.GetFile(member.Photo, "MembersPhotos");
+            if (result is null) return NotFound();
+            return File(result.Value.stream, result.Value.contentType);
+        }
+
         #endregion
 
         #region Create
