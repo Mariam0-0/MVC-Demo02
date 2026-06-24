@@ -1,4 +1,6 @@
 ﻿using GymManagement.DAL.Contexts;
+using GymManagement.DAL.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MVC01_Demo.Contexts;
 
@@ -19,6 +21,8 @@ namespace MVC01_Demo
             var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
 
             //check if any pending migration or not
+            var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+            var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
             var pendingMigration = await dbContext.Database.GetPendingMigrationsAsync();
 
             if (pendingMigration.Any())
@@ -29,6 +33,8 @@ namespace MVC01_Demo
             // folder path
             var seedFolderPath = Path.Combine(app.Environment.ContentRootPath, "wwwroot", "Files");
             await GymDataSeeding.SeedAsync(dbContext, seedFolderPath, logger);
+
+            await IdentityDataSeeding.SeedIdentityData(roleManager, userManager, logger);
         }
     }
 }
