@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-
+using GymManagement.BLL.ViewModels.MembershipViewModels;
 using GymManagement.BLL.ViewModels.MemberViewModels;
 using GymManagement.BLL.ViewModels.PlanViewModels;
 using GymManagement.BLL.ViewModels.SessionViewModel;
@@ -23,6 +23,7 @@ namespace GymManagement.BLL.Profiles
             SessionProfiles();
             PlanProfiles();
             TrainerProfile();
+            MembershipsProfile();
         }
         private void MemberProfiles()
         {
@@ -137,6 +138,24 @@ namespace GymManagement.BLL.Profiles
                     dest.Address.Street = src.Street;
                     dest.UpdatedAt = DateTime.Now;
                 });
+        }
+
+
+        private void MembershipsProfile()
+        {
+            CreateMap<Membership, MemberShipForMemberViewModel>()
+                     .ForMember(dist => dist.MemberName, Option => Option.MapFrom(Src => Src.Member.Name))
+                     .ForMember(dist => dist.PlanName, Option => Option.MapFrom(Src => Src.Plan.Name))
+                     .ForMember(dist => dist.StartDate, Option => Option.MapFrom(X => X.CreatedAt));
+
+            CreateMap<Membership, MemberShipViewModel>()
+                     .ForMember(dist => dist.MemberName, Option => Option.MapFrom(Src => Src.Member.Name))
+                     .ForMember(dist => dist.PlanName, Option => Option.MapFrom(Src => Src.Plan.Name))
+                                          .ForMember(dist => dist.StartDate, Option => Option.MapFrom(X => X.CreatedAt));
+
+            CreateMap<CreateMemberShipViewModel, Membership>();
+            CreateMap<Member, MemberSelectListViewModel>();
+            CreateMap<Plan, PlanSelectListViewModel>();
         }
     }
 }
