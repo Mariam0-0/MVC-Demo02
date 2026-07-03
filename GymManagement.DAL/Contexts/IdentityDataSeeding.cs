@@ -15,7 +15,7 @@ namespace GymManagement.DAL.Contexts
     {
         public static async Task SeedIdentityData(RoleManager<IdentityRole> roleManager,
                                             UserManager<ApplicationUser> userManager,
-                                            ILogger logger,
+                                            
                                             CancellationToken ct = default)
         {
             try
@@ -39,7 +39,7 @@ namespace GymManagement.DAL.Contexts
                     {
                         var roleResult = await roleManager.CreateAsync(role);
                         if (!roleResult.Succeeded)
-                            logger.LogError($"Failed to add role {role.Name}");
+                            Console.WriteLine($"Failed to add role {role.Name}");
                     }
 
                 }
@@ -68,7 +68,7 @@ namespace GymManagement.DAL.Contexts
                     await userManager.CreateAsync(Admin, "P@ssw0rd");
                     await userManager.AddToRoleAsync(Admin, "Admin");
 
-                    logger.LogInformation("Identity seeded successfully");
+                    Console.WriteLine("Identity seeded successfully");
 
 
                 }

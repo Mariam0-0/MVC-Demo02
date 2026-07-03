@@ -13,7 +13,7 @@ namespace GymManagement.DAL.Contexts
 {
     public static class GymDataSeeding
     {
-        public static async Task SeedAsync(GymDbContext dbContext, string seedFolderPath, ILogger logger)
+        public static async Task SeedAsync(GymDbContext dbContext, string seedFolderPath)
         {
             // get data from json file
             // check if table empty
@@ -29,19 +29,19 @@ namespace GymManagement.DAL.Contexts
                     if(plans.Any() )
                     {
                         dbContext.Plans.AddRange(plans);
-                        logger.LogInformation($"Plans seeded with count = {plans.Count}");
+                        Console.WriteLine($"Plans seeded with count = {plans.Count}");
                     }
 
                     // save changes
                     if (dbContext.ChangeTracker.HasChanges())
                         await dbContext.SaveChangesAsync();
                     else
-                        logger.LogInformation("Plan already seeded"); 
+                        Console.WriteLine("Plan already seeded"); 
                 }
             }
             catch (Exception ex) 
             {
-                logger.LogInformation(ex, "Seeding Failed");
+                Console.WriteLine($"Seeding Failed: {ex}");
                 throw;
             }
         }

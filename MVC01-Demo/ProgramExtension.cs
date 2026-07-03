@@ -32,9 +32,9 @@ namespace MVC01_Demo
 
             // folder path
             var seedFolderPath = Path.Combine(app.Environment.ContentRootPath, "wwwroot", "Files");
-            await GymDataSeeding.SeedAsync(dbContext, seedFolderPath, logger);
+            await GymDataSeeding.SeedAsync(dbContext, seedFolderPath);
 
-            await IdentityDataSeeding.SeedIdentityData(roleManager, userManager, logger);
+            await IdentityDataSeeding.SeedIdentityData(roleManager, userManager);
         }
     }
 }

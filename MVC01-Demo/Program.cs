@@ -30,6 +30,10 @@ namespace MVC01_Demo
             builder.Services.AddScoped<ISessionService, SessionService>();
             builder.Services.AddAutoMapper(X => X.AddProfile(new MappingProfile()));
             builder.Services.AddScoped<IAttachmentService, AttachmentService>();
+            builder.Services.AddScoped<IPlanService, PlanService>();
+            builder.Services.AddScoped<IMembershipRepository, MembershipRepository>();
+            builder.Services.AddScoped<IBookingRepository, BookingRepository>();
+
 
 
             builder.Services.AddIdentity<ApplicationUser, IdentityRole>( config => 

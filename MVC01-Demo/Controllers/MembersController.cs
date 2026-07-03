@@ -109,7 +109,7 @@ namespace MVC01_Demo.Controllers
             var member = await _memService.GetMemberToUpdateAsync(id, ct);
             if(member == null)
             {
-                TempData["ErrorMessage"] = "MemberNot Found";
+                TempData["ErrorMessage"] = "Member Not Found";
                 return RedirectToAction(nameof(Index));
             }
             return View(member);

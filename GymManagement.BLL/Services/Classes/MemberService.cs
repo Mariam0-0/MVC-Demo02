@@ -146,7 +146,7 @@ namespace GymManagement.BLL.Services.Classes
             if (emailExist || phoneExist) return false;
 
             // membertoupdatemodel => member
-            _mapper.Map<Member>(model);
+            _mapper.Map(model, member);
             member.UpdatedAt = DateTime.Now;
 
             _unitOfWork.GetRepository<Member>().UpdateAsync(member);

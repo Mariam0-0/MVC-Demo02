@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 
 using GymManagement.BLL.ViewModels.MemberViewModels;
+using GymManagement.BLL.ViewModels.PlanViewModels;
 using GymManagement.BLL.ViewModels.SessionViewModel;
 using GymManagement.DAL.Models;
 using GymManagmemnt.BLL.ViewModels.SessionViewModel;
@@ -17,7 +18,8 @@ namespace GymManagement.BLL.Profiles
         public MappingProfile()
         {
             MemberProfiles();
-            SessionProfiles(); 
+            SessionProfiles();
+            PlanProfiles();
         }
         private void MemberProfiles()
         {
@@ -34,10 +36,20 @@ namespace GymManagement.BLL.Profiles
                 .ForMember(dest => dest.BuildingNumber, opt => opt.MapFrom(src => src.Address.BuildingNumber));
 
             CreateMap<MemberToUpdateViewModel, Member>()
-                .ForMember(dest => dest.Phone, opt => opt.Ignore())
                 .ForMember(dest => dest.Name, opt => opt.Ignore())
+                .ForMember(dest => dest.Photo, opt => opt.Ignore())
+                .ForMember(dest => dest.Address, opt => opt.Ignore())   // Ignore Address, handled in AfterMap
                 .AfterMap((src, dest) =>
                 {
+                    // ✅ Editable fields
+                    dest.Email = src.Email;
+                    dest.Phone = src.Phone;  // ✅ Now Phone updates!
+
+                    // ✅ Address fields
+                    if (dest.Address == null)
+                    {
+                        dest.Address = new Address();
+                    }
                     dest.Address.BuildingNumber = src.BuildingNumber;
                     dest.Address.City = src.City;
                     dest.Address.Street = src.Street;
@@ -66,6 +78,15 @@ namespace GymManagement.BLL.Profiles
                 ;
 
             CreateMap<Session, UpdateSessionViewModel>().ReverseMap();
+        }
+        private void PlanProfiles()
+        {
+            CreateMap<Plan, PlanViewModel>();
+            CreateMap<Plan, UpdatePlanViewModel>().ForMember(dest => dest.PlanName, opt => opt.MapFrom(src => src.Name));
+            CreateMap<UpdatePlanViewModel, Plan>()
+           .ForMember(dest => dest.Name, opt => opt.Ignore())
+           .ForMember(dest => dest.UpdatedAt, opt => opt.MapFrom(src => DateTime.Now));
+
         }
     }
 }
