@@ -33,6 +33,7 @@ namespace MVC01_Demo
             builder.Services.AddScoped<IPlanService, PlanService>();
             builder.Services.AddScoped<IMembershipRepository, MembershipRepository>();
             builder.Services.AddScoped<IBookingRepository, BookingRepository>();
+            builder.Services.AddScoped<ITrainerService, TrainerService>();
 
 
 

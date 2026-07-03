@@ -3,7 +3,9 @@
 using GymManagement.BLL.ViewModels.MemberViewModels;
 using GymManagement.BLL.ViewModels.PlanViewModels;
 using GymManagement.BLL.ViewModels.SessionViewModel;
+using GymManagement.BLL.ViewModels.TrainerViewModels;
 using GymManagement.DAL.Models;
+using GymManagement.DAL.Models.Enums;
 using GymManagmemnt.BLL.ViewModels.SessionViewModel;
 using System;
 using System.Collections.Generic;
@@ -20,6 +22,7 @@ namespace GymManagement.BLL.Profiles
             MemberProfiles();
             SessionProfiles();
             PlanProfiles();
+            TrainerProfile();
         }
         private void MemberProfiles()
         {
@@ -87,6 +90,53 @@ namespace GymManagement.BLL.Profiles
            .ForMember(dest => dest.Name, opt => opt.Ignore())
            .ForMember(dest => dest.UpdatedAt, opt => opt.MapFrom(src => DateTime.Now));
 
+        }
+
+        private void TrainerProfile()
+        {
+            // CREATE: ViewModel -> Entity
+            CreateMap<CreateTrainerViewModel, Trainer>()
+                .ForMember(dest => dest.Address, opt => opt.MapFrom(src => new Address
+                {
+                    BuildingNumber = src.BuildingNumber,
+                    Street = src.Street,
+                    City = src.City
+                }));
+
+            // READ: Entity -> ViewModel
+            CreateMap<Trainer, TrainerViewModel>()
+                .ForMember(dest => dest.Address,
+                    opt => opt.MapFrom(src => $"{src.Address.BuildingNumber} - {src.Address.Street} - {src.Address.City}"))
+                .ForMember(dest => dest.DateOfBirth,
+                    opt => opt.MapFrom(src => src.DateOfBirth.ToShortDateString()))
+                .ForMember(dest => dest.Gender,
+                    opt => opt.MapFrom(src => src.Gender.ToString()));
+
+            // UPDATE READ: Entity -> ViewModel
+            CreateMap<Trainer, TrainerToUpdateViewModel>()
+                .ForMember(dest => dest.Street, opt => opt.MapFrom(src => src.Address.Street))
+                .ForMember(dest => dest.City, opt => opt.MapFrom(src => src.Address.City))
+                .ForMember(dest => dest.BuildingNumber, opt => opt.MapFrom(src => src.Address.BuildingNumber));
+
+            // UPDATE WRITE: ViewModel -> Entity
+            CreateMap<TrainerToUpdateViewModel, Trainer>()
+                .ForMember(dest => dest.Name, opt => opt.Ignore())
+                .ForMember(dest => dest.Address, opt => opt.Ignore())
+                .AfterMap((src, dest) =>
+                {
+                    dest.Email = src.Email;
+                    dest.Phone = src.Phone;
+                    dest.Specialty = src.Specialty;
+
+                    if (dest.Address == null)
+                    {
+                        dest.Address = new Address();
+                    }
+                    dest.Address.BuildingNumber = src.BuildingNumber;
+                    dest.Address.City = src.City;
+                    dest.Address.Street = src.Street;
+                    dest.UpdatedAt = DateTime.Now;
+                });
         }
     }
 }
