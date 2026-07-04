@@ -34,5 +34,11 @@ namespace GymManagement.DAL.Repositories.Interfaces
 
         // check if user has active membership
         Task<TEntity> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate, bool tracking = false, CancellationToken ct = default);
+
+        Task<IEnumerable<TEntity>> GetAllExpAsync(Expression<Func<TEntity, bool>>? predicate = null, bool tracking = false, CancellationToken ct = default);
+
+        //
+        Task<int> CountAsync(Expression<Func<TEntity, bool>>? predicate = null, CancellationToken ct = default);
+
     }
 }

@@ -14,39 +14,28 @@ namespace GymManagement.DAL.Repositories.Classes
     public class SessionRepository : GenericRepository<Session>, ISessionRepository
     {
         private readonly GymDbContext _dbContext;
-        public SessionRepository(GymDbContext dbContext):base(dbContext)
+        public SessionRepository(GymDbContext dbContext) : base(dbContext)
         {
             _dbContext = dbContext;
         }
-
-        public async Task<int> CountOfBookedSlotsAsync(int sessionId, CancellationToken ct = default)
-        {
-            return await _dbContext.Bookings.AsNoTracking().CountAsync(B => B.SessionId == sessionId);
-        }
-
         public async Task<IEnumerable<Session>> GetAllSessionsWithTrainerAndCategoryAsync(Expression<Func<Session, bool>>? predicate = null, CancellationToken ct = default)
         {
             IQueryable<Session> query = _dbContext.Sessions
-                                                  .AsNoTracking()
-                                                  .Include(S => S.Trainer)
-                                                  .Include(S => S.Category);
-            if(predicate is not null) query = query.Where(predicate);
-            return await query.ToListAsync();
+                .AsNoTracking()
+                .Include(s => s.Trainer)
+                .Include(s => s.Category);
+
+            if (predicate is not null) query = query.Where(predicate);
+
+            return await query.ToListAsync(ct);
         }
 
 
-        public async Task<IEnumerable<Session>> GetSessionsWithTrainerAndCategory(CancellationToken ct = default)
-        {
-            var query = _dbContext.Sessions.AsNoTracking().Include(x => x.Trainer).Include(x=>x.Category);
-            return await query.ToListAsync();
-        }
-        public async Task<Session> GetSessionByIdWithTrainerAndCategory(int sessionId, CancellationToken ct = default)
-        {
-            return await _dbContext.Sessions
-                                    .AsNoTracking()
-                                    .Include(S => S.Trainer)
-                                    .Include(S => S.Category)
-                                    .FirstOrDefaultAsync(S => S.Id == sessionId);
-        }
+        public Task<int> GetCountOfBookedSlotsAsync(int sessionId, CancellationToken ct = default)
+            => _dbContext.Bookings.AsNoTracking().CountAsync(b => b.SessionId == sessionId, ct);
+
+        public Task<Session?> GetSessionWithTrainerAndCategoryAsync(int sessionId, CancellationToken ct = default)
+            => _dbContext.Sessions.AsNoTracking().Include(s => s.Trainer).Include(s => s.Category).FirstOrDefaultAsync(s => s.Id == sessionId, ct);
+
     }
 }

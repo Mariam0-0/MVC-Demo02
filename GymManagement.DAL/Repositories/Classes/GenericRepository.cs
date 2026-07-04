@@ -58,5 +58,17 @@ namespace GymManagement.DAL.Repositories.Classes
             IQueryable<TEntity> query = tracking ? _set : _set.AsNoTracking();
             return await query.FirstOrDefaultAsync(predicate);
         }
+
+
+        public async Task<IEnumerable<TEntity>> GetAllExpAsync(Expression<Func<TEntity, bool>>? predicate = null, bool tracking = false, CancellationToken ct = default)
+        {
+            IQueryable<TEntity> query = tracking ? _set : _set.AsNoTracking();
+            if (predicate is not null) query = query.Where(predicate);
+            return await query.ToListAsync(ct);
+        }
+
+        public Task<int> CountAsync(Expression<Func<TEntity, bool>>? predicate = null, CancellationToken ct = default)
+            => predicate is null ? _set.AsNoTracking().CountAsync(ct) : _set.AsNoTracking().CountAsync(predicate, ct);
+
     }
 }

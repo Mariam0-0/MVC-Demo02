@@ -10,15 +10,13 @@ namespace GymManagement.DAL.Repositories.Interfaces
 {
     public interface ISessionRepository :IGenericRepository<Session>
     {
-        Task<IEnumerable<Session>> GetSessionsWithTrainerAndCategory(CancellationToken ct = default);
-
-        Task<int> CountOfBookedSlotsAsync (int sessionId,CancellationToken ct = default);
-
         Task<IEnumerable<Session>> GetAllSessionsWithTrainerAndCategoryAsync(
-            Expression<Func<Session, bool>>? predicate = null,
-            CancellationToken ct = default);
+       Expression<Func<Session, bool>>? predicate = null,
+       CancellationToken ct = default);
 
-        Task<Session> GetSessionByIdWithTrainerAndCategory(int sessionId,CancellationToken ct = default);
+        Task<Session?> GetSessionWithTrainerAndCategoryAsync(int sessionId, CancellationToken ct = default);
+
+        Task<int> GetCountOfBookedSlotsAsync(int sessionId, CancellationToken ct = default);
 
     }
 }
